@@ -44,7 +44,8 @@ class CreateProjectScripts
         $additionalPackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/AdditionalPackages.yaml');
         $additionalPackageOptions = array_keys($additionalPackageConfigurations);
         $additionalPackagesIndexes = $output->select('Please select additional packages', array_keys($additionalPackageConfigurations), null, true);
-        $additionalPackages = array_filter($additionalPackageOptions, function() );
+        // $additionalPackages = array_filter($additionalPackageOptions, function() {});
+        $additionalPackages = [];
 
         // remove splash distribution builder
         $output->outputTable([
