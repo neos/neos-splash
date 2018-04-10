@@ -36,7 +36,7 @@ class CreateProjectScripts
 
         // select site-package-template
         $sitePackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml', false);
-        $sitePackageOptions = array_keys($sitePackageConfigurations)
+        $sitePackageOptions = array_keys($sitePackageConfigurations);
         $sitePackageIndex = $output->select('Please select the template for the site package', $sitePackageOptions, 'empty', false);
         $sitePackageKey = $sitePackageOptions[$sitePackageIndex];
 
