@@ -1,0 +1,40 @@
+{
+    "name": "neos/splash",
+    "description": "Neos Splash Distribution",
+    "license": "GPL-3.0+",
+    "type": "project",
+    "config": {
+        "vendor-dir": "Packages/Libraries",
+        "bin-dir": "bin"
+    },
+    "require": {
+        "neos/neos": "~3.3.0",
+        "neos/splash-distributionbuilder": "dev-master"
+    },
+    "require-dev": {
+        "neos/buildessentials": "~4.0.0",
+        "mikey179/vfsstream": "~1.6",
+        "phpunit/phpunit": "~6.0.0",
+        "symfony/css-selector": "~2.0",
+        "neos/behat": "dev-master"
+    },
+    "replace": {
+        "typo3/neos-base-distribution": "self.version"
+    },
+    "suggest": {
+        "ext-pdo_sqlite": "For running functional tests out-of-the-box this is required"
+    },
+    "scripts": {
+        "post-create-project-cmd": "Neos\\Splash\\DistributionBuilder\\Composer\\CreateProjectScripts::setupDistribution",
+        "post-update-cmd": "Neos\\Flow\\Composer\\InstallerScripts::postUpdateAndInstall",
+        "post-install-cmd": "Neos\\Flow\\Composer\\InstallerScripts::postUpdateAndInstall",
+        "post-package-update": "Neos\\Flow\\Composer\\InstallerScripts::postPackageUpdateAndInstall",
+        "post-package-install": "Neos\\Flow\\Composer\\InstallerScripts::postPackageUpdateAndInstall"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./DistributionPackages/*"
+        }
+    ]
+}

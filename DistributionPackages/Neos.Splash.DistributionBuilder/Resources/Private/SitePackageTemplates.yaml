@@ -1,0 +1,11 @@
+#
+# Curated list of site-packages that can be use as template for the site package
+# in new Installations
+#
+'empty':
+  title: 'empty site package'
+'Neos.Demo':
+  title: 'Neos Demo'
+  composerName: 'neos/demo'
+  versionConstraint: '~3.2.0'
+
