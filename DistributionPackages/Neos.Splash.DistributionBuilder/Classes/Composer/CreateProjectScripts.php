@@ -6,13 +6,8 @@ use Composer\DependencyResolver\Operation\UpdateOperation;
 use Composer\Script\Event;
 use Composer\Installer\PackageEvent;
 use Neos\Flow\Cli\ConsoleOutput;
-use Neos\Flow\Package\PackageManager;
 
 use Symfony\Component\Yaml\Yaml;
-
-use Neos\Flow\Configuration\ConfigurationManager;
-use Neos\Utility\Files;
-use Neos\Flow\ObjectManagement\ObjectManager;
 
 class CreateProjectScripts
 {
@@ -36,23 +31,26 @@ class CreateProjectScripts
 
         // select site-package-template
         $sitePackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml', false);
+        echo($sitePackageConfigurations);
+        return;
+
         $sitePackageOptions = array_keys($sitePackageConfigurations);
         $sitePackageIndex = $output->select('Please select the template for the site package', $sitePackageOptions, 'empty', false);
-        $sitePackageKey = $sitePackageOptions[$sitePackageIndex];
+        if ($sitePackageIndex) {
+            $sitePackageKey = $sitePackageOptions[$sitePackageIndex];
+        }
 
         // select additional-packages
         $additionalPackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/AdditionalPackages.yaml');
         $additionalPackageOptions = array_keys($additionalPackageConfigurations);
         $additionalPackagesIndexes = $output->select('Please select additional packages', array_keys($additionalPackageConfigurations), null, true);
-        // $additionalPackages = array_filter($additionalPackageOptions, function() {});
         $additionalPackages = [];
 
-        // remove splash distribution builder
+        // show information
         $output->outputTable([
             ['VendorNamespace', $vendor],
             ['ProjectName', $project],
-            ['SitePackage Template', $sitePackageKey],
-            ['Additonal Packages', implode(',', $additionalPackages)]
+            ['SitePackage Template', $sitePackageKey]
         ]);
 
         $proceed = $output->askConfirmation('Is this correct?',  true);
