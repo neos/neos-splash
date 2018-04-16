@@ -1,3 +1,6 @@
+
+*ATTENTION this is WIP and currently in a totally unworking state*
+
 ------------------------
 Neos Splash Distribution
 ------------------------
