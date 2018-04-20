@@ -1,5 +1,5 @@
 
-*ATTENTION this is WIP and currently in a totally unworking state*
+*ATTENTION this is totall WIP*
 
 ------------------------
 Neos Splash Distribution
@@ -16,7 +16,7 @@ During development you will have to add your local repository to the global comp
 
 Add this to your global composer configuration config.json:
 
-```
+```yaml
 {
     "repositories": {
         "neos-splash": {
@@ -32,5 +32,5 @@ Add this to your global composer configuration config.json:
 
 And the use `create-project` to setup you neos-distribution:
 
-`composer create-project neos/splash test_splash_17 --stability dev`
+`composer create-project neos/splash my_custom_project --stability dev`
 
