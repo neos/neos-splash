@@ -29,22 +29,22 @@ class CreateProjectScripts
         $vendor = $output->askAndValidate("Vendor-namespace: ", $namespaceValidator);
         $project = $output->askAndValidate("Project-name: ", $namespaceValidator);
 
-        // select site-package-template
-        $sitePackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml', false);
-        echo($sitePackageConfigurations);
-        return;
-
-        $sitePackageOptions = array_keys($sitePackageConfigurations);
-        $sitePackageIndex = $output->select('Please select the template for the site package', $sitePackageOptions, 'empty', false);
-        if ($sitePackageIndex) {
-            $sitePackageKey = $sitePackageOptions[$sitePackageIndex];
-        }
-
-        // select additional-packages
-        $additionalPackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/AdditionalPackages.yaml');
-        $additionalPackageOptions = array_keys($additionalPackageConfigurations);
-        $additionalPackagesIndexes = $output->select('Please select additional packages', array_keys($additionalPackageConfigurations), null, true);
-        $additionalPackages = [];
+//        // select site-package-template
+//        $sitePackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml', false);
+//        echo($sitePackageConfigurations);
+//        return;
+//
+//        $sitePackageOptions = array_keys($sitePackageConfigurations);
+//        $sitePackageIndex = $output->select('Please select the template for the site package', $sitePackageOptions, 'empty', false);
+//        if ($sitePackageIndex) {
+//            $sitePackageKey = $sitePackageOptions[$sitePackageIndex];
+//        }
+//
+//        // select additional-packages
+//        $additionalPackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/AdditionalPackages.yaml');
+//        $additionalPackageOptions = array_keys($additionalPackageConfigurations);
+//        $additionalPackagesIndexes = $output->select('Please select additional packages', array_keys($additionalPackageConfigurations), null, true);
+//        $additionalPackages = [];
 
         // show information
         $output->outputTable([
