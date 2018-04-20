@@ -7,8 +7,14 @@
         "vendor-dir": "Packages/Libraries",
         "bin-dir": "bin"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./src/*"
+        }
+    ],
     "require": {
-        "neos/neos": "~3.3.0",
+        "neos/neos": "^3.3.0",
         "neos/splash-distributionbuilder": "dev-master"
     },
     "require-dev": {
@@ -30,11 +36,5 @@
         "post-install-cmd": "Neos\\Flow\\Composer\\InstallerScripts::postUpdateAndInstall",
         "post-package-update": "Neos\\Flow\\Composer\\InstallerScripts::postPackageUpdateAndInstall",
         "post-package-install": "Neos\\Flow\\Composer\\InstallerScripts::postPackageUpdateAndInstall"
-    },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./src/*"
-        }
-    ]
+    }
 }

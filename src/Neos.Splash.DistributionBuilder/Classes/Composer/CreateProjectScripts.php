@@ -5,70 +5,121 @@ use Composer\DependencyResolver\Operation\InstallOperation;
 use Composer\DependencyResolver\Operation\UpdateOperation;
 use Composer\Script\Event;
 use Composer\Installer\PackageEvent;
-use Neos\Flow\Cli\ConsoleOutput;
-
 use Symfony\Component\Yaml\Yaml;
+
+use Neos\Flow\Cli\ConsoleOutput;
+use Neos\Utility\Files;
+
+use Neos\Splash\DistributionBuilder\Service\PackageService;
+
 
 class CreateProjectScripts
 {
+    const LOCAL_SRC_PATH = 'src';
 
     /**
      * Setup the neos distribution
      */
     static public function setupDistribution(Event $event)
     {
+        if (!defined('FLOW_PATH_ROOT')) {
+            define('FLOW_PATH_ROOT', Files::getUnixStylePath(getcwd()) . '/');
+        }
+
+        /**
+         * @var Composer
+         */
+        $composer = $event->getComposer();
+
         $output = new ConsoleOutput();
+        $output->outputLine();
+
+        // site package template
+        $output->outputLine();
+        $sitePackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml', false);
+        $sitePackageChoices = array_map(function($item) { return $item['title'] . ': ' . $item['description']; }, $sitePackageConfigurations);
+        $sitePackageIndex = (integer)$output->select('Please select the template for your custom site-package', $sitePackageChoices, 0, false);
+        $sitePackageName = array_key_exists('composerName', $sitePackageConfigurations[$sitePackageIndex]) ? $sitePackageConfigurations[$sitePackageIndex]['composerName'] : null;
+        $sitePackageVersion = array_key_exists('composerConstraint', $sitePackageConfigurations[$sitePackageIndex]) ? $sitePackageConfigurations[$sitePackageIndex]['composerConstraint'] : '*';
 
         // project and vendor namespace
+        $output->outputLine();
+        $output->outputLine("Please define the namespace for your site-package:");
         $namespaceValidator = function($namespace) {
             if (preg_match('/^[A-Za-z0-9]+$/u', $namespace)) {
                 return $namespace;
             }
             throw new \Exception(sprintf('Namespace "%s" is invalid', $namespace));
         };
-        $vendor = $output->askAndValidate("Vendor-namespace: ", $namespaceValidator);
-        $project = $output->askAndValidate("Project-name: ", $namespaceValidator);
-
-
-
-//        // select site-package-template
-//        $sitePackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml', false);
-//        echo($sitePackageConfigurations);
-//        return;
-//
-//        $sitePackageOptions = array_keys($sitePackageConfigurations);
-//        $sitePackageIndex = $output->select('Please select the template for the site package', $sitePackageOptions, 'empty', false);
-//        if ($sitePackageIndex) {
-//            $sitePackageKey = $sitePackageOptions[$sitePackageIndex];
-//        }
-//
-//        // select additional-packages
-//        $additionalPackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/AdditionalPackages.yaml');
-//        $additionalPackageOptions = array_keys($additionalPackageConfigurations);
-//        $additionalPackagesIndexes = $output->select('Please select additional packages', array_keys($additionalPackageConfigurations), null, true);
-//        $additionalPackages = [];
-
-
+        $vendorName = $output->askAndValidate("Vendor-namespace: ", $namespaceValidator);
+        $projectName = $output->askAndValidate("Project-name: ", $namespaceValidator);
 
         // show information
         $output->outputTable([
-            ['VendorNamespace', $vendor],
-            ['ProjectName', $project],
-            ['foo', 'bar']
-
+            ['VendorNamespace', $vendorName],
+            ['ProjectName', $projectName],
+            ['SitePackageName', $sitePackageName],
+            ['SitePackageVersion', $sitePackageVersion]
         ]);
 
         $proceed = $output->askConfirmation('Is this correct?',  true);
 
         if (!$proceed) {
-            die (1);
+            $output->outputLine('Restarting configuration');
+            self::setupDistribution($event);
         }
 
-        echo "setup";
+        if ($sitePackageName) {
 
-        // create site package empty or a by template
+            $customSitePackageKey = $vendorName . '.' . $projectName;
+            $customSitePackageComposerName = strtolower($vendorName) . '/' . strtolower(str_replace('.', '-', $projectName));
+            $customSitePackageNamespace = str_replace('.', '\\', $customSitePackageKey);
+            $customSitePackagePath = FLOW_PATH_ROOT . self::LOCAL_SRC_PATH . DIRECTORY_SEPARATOR . $customSitePackageKey;
 
-        // adjust main composer.json
+            $output->outputLine();
+            $output->outputLine(sprintf('The package template "%s" is downloaded and converted to package "%s" in path "%s"' , $sitePackageName,  $customSitePackageKey, $customSitePackagePath));
+
+            PackageService::downloadPackageWithComposer(
+                $composer,
+                $sitePackageName,
+                $sitePackageVersion,
+                $customSitePackagePath
+            );
+
+            PackageService::alterPackageNamespace(
+                $customSitePackagePath,
+                $customSitePackageComposerName,
+                $customSitePackageKey,
+                $customSitePackageNamespace
+            );
+
+            // require site package
+            $output->outputLine();
+            $output->outputLine(sprintf('Add composer requirement for package %s' ,  $customSitePackageComposerName));
+            shell_exec( sprintf('composer require %s dev-master', $customSitePackageComposerName));
+
+            // remove dependency to splash distribution builder
+            $output->outputLine();
+            $output->outputLine('Remove dependency to neos/splash-distributionbuilder');
+            shell_exec( 'composer remove neos/splash-distributionbuilder');
+            Files::removeDirectoryRecursively(FLOW_PATH_ROOT . self::LOCAL_SRC_PATH . DIRECTORY_SEPARATOR . 'Neos.Splash.DistributionBuilder');
+
+        } else {
+            $output->outputLine('Sorry empty site-packages cannot be created right now.');
+            $output->outputLine('The package create command does not support to creathe them in local src folder yet.');
+            die(1);
+        }
+
+        // success
+        $output->outputLine();
+        $output->outputLine('Your distribution was prepared successfully.');
+        $output->outputLine();
+        $output->outputLine('For local development you still have to:');
+        $output->outputLine();
+        $output->outputLine('1. Add database credentials to Configuration/Development/Settings.yaml');
+        $output->outputLine('2. Migrate database "./flow doctrine:migrate"');
+        $output->outputLine('3. Import site data "./flow site:import --package-key ' . $vendorName . '.' . $projectName . ' "');
+        $output->outputLine('4. Start the Webserver "./flow server:run"');
 
     }
 }
