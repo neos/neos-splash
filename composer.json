@@ -34,7 +34,7 @@
     "repositories": [
         {
             "type": "path",
-            "url": "./DistributionPackages/*"
+            "url": "./src/*"
         }
     ]
 }

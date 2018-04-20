@@ -29,6 +29,8 @@ class CreateProjectScripts
         $vendor = $output->askAndValidate("Vendor-namespace: ", $namespaceValidator);
         $project = $output->askAndValidate("Project-name: ", $namespaceValidator);
 
+
+
 //        // select site-package-template
 //        $sitePackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml', false);
 //        echo($sitePackageConfigurations);
@@ -46,10 +48,14 @@ class CreateProjectScripts
 //        $additionalPackagesIndexes = $output->select('Please select additional packages', array_keys($additionalPackageConfigurations), null, true);
 //        $additionalPackages = [];
 
+
+
         // show information
         $output->outputTable([
             ['VendorNamespace', $vendor],
-            ['ProjectName', $project]
+            ['ProjectName', $project],
+            ['foo', 'bar']
+
         ]);
 
         $proceed = $output->askConfirmation('Is this correct?',  true);
