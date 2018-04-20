@@ -49,8 +49,7 @@ class CreateProjectScripts
         // show information
         $output->outputTable([
             ['VendorNamespace', $vendor],
-            ['ProjectName', $project],
-            ['SitePackage Template', $sitePackageKey]
+            ['ProjectName', $project]
         ]);
 
         $proceed = $output->askConfirmation('Is this correct?',  true);
