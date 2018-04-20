@@ -45,6 +45,7 @@ class CreateProjectScripts
         // project and vendor namespace
         $output->outputLine();
         $output->outputLine("Please define the namespace for your site-package:");
+        $output->outputLine();
         $namespaceValidator = function($namespace) {
             if (preg_match('/^[A-Za-z0-9]+$/u', $namespace)) {
                 return $namespace;
@@ -53,22 +54,7 @@ class CreateProjectScripts
         };
         $vendorName = $output->askAndValidate("Vendor-namespace: ", $namespaceValidator);
         $projectName = $output->askAndValidate("Project-name: ", $namespaceValidator);
-
-        // show information
-        $output->outputTable([
-            ['VendorNamespace', $vendorName],
-            ['ProjectName', $projectName],
-            ['SitePackageName', $sitePackageName],
-            ['SitePackageVersion', $sitePackageVersion]
-        ]);
-
-        $proceed = $output->askConfirmation('Is this correct?',  true);
-
-        if (!$proceed) {
-            $output->outputLine('Restarting configuration');
-            self::setupDistribution($event);
-        }
-
+        
         if ($sitePackageName) {
 
             $customSitePackageKey = $vendorName . '.' . $projectName;
@@ -103,10 +89,12 @@ class CreateProjectScripts
             $output->outputLine('Remove dependency to neos/splash-distributionbuilder');
             shell_exec( 'composer remove neos/splash-distributionbuilder');
             Files::removeDirectoryRecursively(FLOW_PATH_ROOT . self::LOCAL_SRC_PATH . DIRECTORY_SEPARATOR . 'Neos.Splash.DistributionBuilder');
-
+            $output->outputLine();
         } else {
+            $output->outputLine();
             $output->outputLine('Sorry empty site-packages cannot be created right now.');
             $output->outputLine('The package create command does not support to creathe them in local src folder yet.');
+            $output->outputLine();
             die(1);
         }
 
