@@ -36,7 +36,11 @@ class CreateProjectScripts
 
         // site package template
         $output->outputLine();
-        $sitePackageConfigurations = Yaml::parse(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml', false);
+        $sitePackageConfigurations = Yaml::parse(
+            file_get_contents(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml' ),
+            true
+        );
+
         $sitePackageChoices = array_map(function($item) { return $item['title'] . ': ' . $item['description']; }, $sitePackageConfigurations);
         $sitePackageIndex = (integer)$output->select('Please select the template for your custom site-package', $sitePackageChoices, 0, false);
         $sitePackageName = array_key_exists('composerName', $sitePackageConfigurations[$sitePackageIndex]) ? $sitePackageConfigurations[$sitePackageIndex]['composerName'] : null;
@@ -54,7 +58,7 @@ class CreateProjectScripts
         };
         $vendorName = $output->askAndValidate("Vendor-namespace: ", $namespaceValidator);
         $projectName = $output->askAndValidate("Project-name: ", $namespaceValidator);
-        
+
         if ($sitePackageName) {
 
             $customSitePackageKey = $vendorName . '.' . $projectName;
@@ -93,7 +97,7 @@ class CreateProjectScripts
         } else {
             $output->outputLine();
             $output->outputLine('Sorry empty site-packages cannot be created right now.');
-            $output->outputLine('The package create command does not support to creathe them in local src folder yet.');
+            $output->outputLine('The package create command does not support to create them in local src folder yet.');
             $output->outputLine();
             die(1);
         }
