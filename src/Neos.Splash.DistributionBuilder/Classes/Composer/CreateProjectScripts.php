@@ -42,9 +42,12 @@ class CreateProjectScripts
         );
 
         $sitePackageChoices = array_map(function($item) { return $item['title'] . ': ' . $item['description']; }, $sitePackageConfigurations);
-        $sitePackageIndex = (integer)$output->select('Please select the template for your custom site-package', $sitePackageChoices, 0, false);
-        $sitePackageName = array_key_exists('composerName', $sitePackageConfigurations[$sitePackageIndex]) ? $sitePackageConfigurations[$sitePackageIndex]['composerName'] : null;
-        $sitePackageVersion = array_key_exists('composerConstraint', $sitePackageConfigurations[$sitePackageIndex]) ? $sitePackageConfigurations[$sitePackageIndex]['composerConstraint'] : '*';
+        $sitePackageChoice = $output->select('Please select the template for your custom site-package', $sitePackageChoices, 0, false);
+        $sitePackageIndex = array_search($sitePackageChoice, $sitePackageChoices);
+
+        $sitePackage = $sitePackageConfigurations[$sitePackageIndex];
+        $sitePackageName = $sitePackage['composerName'] ?? null;
+        $sitePackageVersion = $sitePackage['composerConstraint'] ?? '*';
 
         // project and vendor namespace
         $output->outputLine();
@@ -56,8 +59,8 @@ class CreateProjectScripts
             }
             throw new \Exception(sprintf('Namespace "%s" is invalid', $namespace));
         };
-        $vendorName = $output->askAndValidate("Vendor-namespace: ", $namespaceValidator);
-        $projectName = $output->askAndValidate("Project-name: ", $namespaceValidator);
+        $vendorName = $output->ask("Vendor-namespace: ");
+        $projectName = $output->ask("Project-name: ");
 
         if ($sitePackageName) {
 
@@ -86,7 +89,7 @@ class CreateProjectScripts
             // require site package
             $output->outputLine();
             $output->outputLine(sprintf('Add composer requirement for package %s' ,  $customSitePackageComposerName));
-            shell_exec( sprintf('composer require %s dev-master', $customSitePackageComposerName));
+            shell_exec( sprintf('composer require %s 1.0.0', $customSitePackageComposerName));
 
             // remove dependency to splash distribution builder
             $output->outputLine();

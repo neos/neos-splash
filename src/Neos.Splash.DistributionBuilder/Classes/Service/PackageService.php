@@ -91,6 +91,7 @@ class PackageService
             $path . DIRECTORY_SEPARATOR . 'composer.json',
             [
                 'name' => $newPackageName,
+                'version' => '1.0.0',
                 'extra' => [
                     'neos' => [
                         'package-key' => $newPackageKey
