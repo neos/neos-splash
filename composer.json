@@ -15,7 +15,7 @@
     ],
     "require": {
         "neos/neos": "^4.1.0",
-        "neos/splash-distributionbuilder": "dev-master"
+        "neos/splash-distributionbuilder": "1.0.0"
     },
     "require-dev": {
         "neos/buildessentials": "~4.1.0",
@@ -23,9 +23,6 @@
         "phpunit/phpunit": "~6.0.0",
         "symfony/css-selector": "~2.0",
         "neos/behat": "dev-master"
-    },
-    "replace": {
-        "typo3/neos-base-distribution": "self.version"
     },
     "suggest": {
         "ext-pdo_sqlite": "For running functional tests out-of-the-box this is required"

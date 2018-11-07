@@ -2,6 +2,7 @@
     "description": "",
     "type": "neos-package",
     "name": "neos/splash-distributionbuilder",
+    "version": "1.0.0",
     "require": {
         "symfony/console": "*"
     },
