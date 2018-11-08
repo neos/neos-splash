@@ -1,0 +1,27 @@
+#
+# Curated list of site-packages that can be use as template for the site package
+# in new Installations
+#
+sitePackages:
+  default: "empty"
+  items:
+    createNew:
+      title: 'Empty'
+      description: 'create a new empty site package'
+      type: 'create'
+
+    cloneNeosDemo:
+      title: 'Neos.Demo'
+      description: 'the classic demo package, cloned for local modification'
+      type: 'clone'
+      options:
+        packageKey: 'Neos.Demo'
+        version: "^4.1"
+
+    installNeosDemo:
+      title: 'Neos.Demo'
+      description: 'the classic demo package, externally required for updating'
+      type: 'install'
+      options:
+        packageKey: 'Neos.Demo'
+        version: "^4.1"

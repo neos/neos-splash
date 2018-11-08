@@ -10,12 +10,12 @@
     "repositories": [
         {
             "type": "path",
-            "url": "./src/*"
+            "url": "./DistributionPackages/*"
         }
     ],
     "require": {
         "neos/neos": "^4.1.0",
-        "neos/splash-distributionbuilder": "1.0.0"
+        "neos/splash-distributionbuilder": "@dev"
     },
     "require-dev": {
         "neos/buildessentials": "~4.1.0",
