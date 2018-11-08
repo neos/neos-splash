@@ -1,27 +1,53 @@
 #
 # Curated list of site-packages that can be use as template for the site package
-# in new Installations
+#
+
+#
+# the site packages that are offered during tge setup
 #
 sitePackages:
-  default: "empty"
+
+  #
+  # the package that is enabled by default
+  #
+  default: "createEmpty"
+
+  #
+  # each item here has to provide the keys title, description
+  # and type and options. The option keys depend on the
+  # type
+  #
   items:
-    createNew:
+
+    #
+    # type:create will create a new empty package
+    # in the given namespace
+    #
+    createEmpty:
       title: 'Empty'
-      description: 'create a new empty site package'
+      description: 'Empty site-package.'
       type: 'create'
 
+    #
+    # type:clone will clone an existing package into
+    # the given namespace
+    #
     cloneNeosDemo:
       title: 'Neos.Demo'
-      description: 'the classic demo package, cloned for local modification'
+      description: 'the classic demo package, cloned into your namespace for local adjustments'
       type: 'clone'
       options:
         packageKey: 'Neos.Demo'
-        version: "^4.1"
+        version: '^4.1'
 
+    #
+    # type:install will install the slected site package
+    # as a composer dependency
+    #
     installNeosDemo:
       title: 'Neos.Demo'
-      description: 'the classic demo package, externally required for updating'
-      type: 'install'
+      description: 'the classic demo package, installed as external dependency'
+      type: 'Install'
       options:
         packageKey: 'Neos.Demo'
-        version: "^4.1"
+        version: '^4.1'

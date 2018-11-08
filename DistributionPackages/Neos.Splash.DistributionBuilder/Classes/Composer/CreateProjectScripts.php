@@ -30,20 +30,20 @@ class CreateProjectScripts
 
         $composer = $event->getComposer();
         $output = new ConsoleOutput();
-
+        
         $output->outputLine();
         $output->outputLine('Welcome to Neos');
         $output->outputLine();
         $output->outputLine('Please answer some questions for finishing the setup of your Neos-distribution.');
         $output->outputLine();
 
-        $configuration = self::getConfiguration();
+        $configuration = Yaml::parseFile(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml', true);
 
         $availableSitePackages = $configuration['sitePackages']['items'] ?? [];
         $defaultSitePackage = $configuration['sitePackages']['default'] ?? null;
 
         $sitePackageChoices = array_map(function($item) { return $item['title'] . ': ' . $item['description']; }, $availableSitePackages);
-        $sitePackageIndex = $output->select('Please select the template for your custom site-package', $sitePackageChoices, $defaultSitePackage, false);
+        $sitePackageIndex = $output->select('Please select the site-package', $sitePackageChoices, $defaultSitePackage, false);
 
         $sitePackageConfiguration = $availableSitePackages[$sitePackageIndex];
 
@@ -86,15 +86,6 @@ class CreateProjectScripts
     }
 
     /**
-     * @return array configuration
-     */
-    protected static function getConfiguration()
-    {
-        $rawConfiguration = file_get_contents(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml');
-        return Yaml::parse($rawConfiguration, true);
-    }
-
-    /**
      * @param string $title
      * @return string
      */
@@ -105,7 +96,7 @@ class CreateProjectScripts
         $output->outputLine($title);
         $output->outputLine();
 
-        $vendorName = $output->ask("Vendor-namespace: ");
+        $vendorName = $output->ask("Vendor-name: ");
         $projectName = $output->ask("Project-name: ");
 
         $vendorName = trim($vendorName);
@@ -154,12 +145,11 @@ class CreateProjectScripts
     {
         $output = new ConsoleOutput();
 
-
         $sitePackageKey = $sitePackageConfiguration['options']['packageKey'];
         $sitePackageVersion = $sitePackageConfiguration['options']['version'] ?? '*';
         $sitePackageDefinition = new PackageRequirement($sitePackageKey, $sitePackageVersion);
 
-        $newSitePackageDefinition = new PackageRequirement($newSitePackageKey, '*@dev');
+        $newSitePackageDefinition = new PackageRequirement($newSitePackageKey, '@dev');
         $newSitePackagePath = self::getPackagesPath() . DIRECTORY_SEPARATOR . $newSitePackageDefinition->getPackageKey();
 
         $output->outputLine();

@@ -7,12 +7,12 @@
         "vendor-dir": "Packages/Libraries",
         "bin-dir": "bin"
     },
-    "repositories": [
-        {
+    "repositories": {
+        "distributionPackages": {
             "type": "path",
             "url": "./DistributionPackages/*"
         }
-    ],
+    },
     "require": {
         "neos/neos": "^4.1.0",
         "neos/splash-distributionbuilder": "@dev"

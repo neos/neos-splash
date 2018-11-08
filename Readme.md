@@ -15,6 +15,10 @@ This package shall help you setting up your new Neos project.
 Configuration
 -------------
 
+The offered options are configured in the file DistributionPackages/Neos.Splash.DistributionBuilder/Resources/Private/SitePackageTemplates.yaml
+
+You can ovverride 
+
 ```yaml
 
 #
@@ -25,7 +29,7 @@ sitePackages:
   # 
   # the package that is enabled by default
   # 
-  default: "empty"
+  default: "createEmpty"
 
   #  
   # each item here has to provide the keys title, description
@@ -34,9 +38,11 @@ sitePackages:
   # 
   items:
   
+    #
     # type:create will create a new empty package
-    # in the given namespace 
-    empty:
+    # in the given namespace
+    #
+    createEmpty:
       title: 'Empty'
       description: 'Empty site-package.'
       type: 'create'
@@ -44,25 +50,25 @@ sitePackages:
     #
     # type:clone will clone an existing package into
     # the given namespace
-    # 
+    #
     cloneNeosDemo:
       title: 'Neos.Demo'
-      description: 'The classic neos-demo site-package.'
+      description: 'the classic demo package, cloned into your namespace for local adjustments'
       type: 'clone'
       options:
-        packageKey: 'neos/demo'
+        packageKey: 'Neos.Demo'
         version: '^4.1'
 
     #
-    # type:install will install the slected site package 
+    # type:install will install the slected site package
     # as a composer dependency
     #
     installNeosDemo:
       title: 'Neos.Demo'
-      description: 'The classic neos-demo site-package.'
+      description: 'the classic demo package, installed as external dependency'
       type: 'Install'
       options:
-        packageKey: 'neos/demo'
+        packageKey: 'Neos.Demo'
         version: '^4.1'
 ```
 
