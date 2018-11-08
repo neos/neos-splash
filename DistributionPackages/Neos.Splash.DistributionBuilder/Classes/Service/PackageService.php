@@ -49,13 +49,18 @@ class PackageService
      */
     public static function alterPackageNamespace(Composer $composer, string $path, PackageRequirement $oldPackageDefinition, PackageRequirement $newPackageDefinition)
     {
-        $replacements = [];
+        $stringReplacements = [];
 
-        $replacements[$oldPackageDefinition->getPackageKey()] = $newPackageDefinition->getPackageKey();
-        $replacements[$oldPackageDefinition->getPhpNamespace()] = $newPackageDefinition->getPhpNamespace();
-        $replacements[addslashes($oldPackageDefinition->getPhpNamespace())] = addslashes($newPackageDefinition->getPhpNamespace());
+        $stringReplacements[$oldPackageDefinition->getPackageKey()] = $newPackageDefinition->getPackageKey();
+        $stringReplacements[$oldPackageDefinition->getPhpNamespace()] = $newPackageDefinition->getPhpNamespace();
+        $stringReplacements[addslashes($oldPackageDefinition->getPhpNamespace())] = addslashes($newPackageDefinition->getPhpNamespace());
 
-        StringReplacementService::replaceRecursively($replacements, $path);
+        StringReplacementService::replaceRecursively($stringReplacements, $path);
+
+        $configPathReplacements = [];
+        $configPathReplacements[$oldPackageDefinition->getPackageKey()] = $newPackageDefinition->getPackageKey();
+
+        ConfigurationAdjustmentService::replaceSettingPathes($configPathReplacements, $path);
 
         JsonFileService::modifyFile(
             $path . DIRECTORY_SEPARATOR . 'composer.json',

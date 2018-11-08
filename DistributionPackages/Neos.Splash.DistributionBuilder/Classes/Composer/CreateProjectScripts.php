@@ -30,7 +30,7 @@ class CreateProjectScripts
 
         $composer = $event->getComposer();
         $output = new ConsoleOutput();
-        
+
         $output->outputLine();
         $output->outputLine('Welcome to Neos');
         $output->outputLine();
