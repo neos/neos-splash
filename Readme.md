@@ -17,12 +17,12 @@ Configuration
 
 The offered options are configured in the file DistributionPackages/Neos.Splash.DistributionBuilder/Resources/Private/SitePackageTemplates.yaml
 
-You can ovverride 
+You can override 
 
 ```yaml
 
 #
-# the site packages that are offered during tge setup
+# the site packages that are offered during the setup
 #
 sitePackages:
 
@@ -60,7 +60,7 @@ sitePackages:
         version: '^4.1'
 
     #
-    # type:install will install the slected site package
+    # type:install will install the selected site package
     # as a composer dependency
     #
     installNeosDemo:
