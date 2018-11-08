@@ -30,7 +30,7 @@ class ConfigurationAdjustmentService
             if (!$item->isFile()) {
                 continue;
             }
-            if (fnmatch( 'Settings*' , $item->getFilename()) && $item->getExtension() == 'yaml') {
+            if (fnmatch('Settings*', $item->getFilename()) && $item->getExtension() == 'yaml') {
                 $configuration = Yaml::parseFile($item->getRealPath());
                 $configurationWasAltered = false;
 

@@ -65,5 +65,4 @@ class PackageRequirement
     {
         return str_replace('.', '\\', $this->getPackageKey());
     }
-
 }

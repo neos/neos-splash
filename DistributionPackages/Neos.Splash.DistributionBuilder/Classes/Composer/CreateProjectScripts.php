@@ -22,7 +22,7 @@ class CreateProjectScripts
     /**
      * Setup the neos distribution
      */
-    static public function setupDistribution(Event $event)
+    public static function setupDistribution(Event $event)
     {
         if (!defined('FLOW_PATH_ROOT')) {
             define('FLOW_PATH_ROOT', Files::getUnixStylePath(getcwd()) . '/');
@@ -42,8 +42,10 @@ class CreateProjectScripts
         $availableSitePackages = $configuration['sitePackages']['items'] ?? [];
         $defaultSitePackage = $configuration['sitePackages']['default'] ?? null;
 
-        $sitePackageChoices = array_map(function($item) { return $item['title'] . ': ' . $item['description']; }, $availableSitePackages);
-        $sitePackageIndex = $output->select('Please select the site-package', $sitePackageChoices, $defaultSitePackage, false);
+        $sitePackageChoices = array_map(function ($item) {
+            return $item['title'] . ': ' . $item['description'];
+        }, $availableSitePackages);
+        $sitePackageIndex = $output->select('Please select the site-package', $sitePackageChoices, $defaultSitePackage);
 
         $sitePackageConfiguration = $availableSitePackages[$sitePackageIndex];
 
@@ -58,7 +60,7 @@ class CreateProjectScripts
                 break;
             case 'clone':
                 $sitePackageKey = self::askForPackageKey("Please define the namespace for your site-package:");
-                self::cloneSitePackage($sitePackageConfiguration,  $composer, $sitePackageKey);
+                self::cloneSitePackage($sitePackageConfiguration, $composer, $sitePackageKey);
                 break;
             case 'install':
                 $sitePackageKey = $sitePackageConfiguration['options']['packageKey'] ?? null;
@@ -70,7 +72,7 @@ class CreateProjectScripts
         $output->outputLine();
         $output->outputLine('Remove the setup tool neos/splash-distributionbuilder');
         shell_exec('composer remove neos/splash-distributionbuilder');
-        Files::removeDirectoryRecursively(FLOW_PATH_ROOT . self::LOCAL_SRC_PATH . DIRECTORY_SEPARATOR . 'Neos.Splash.DistributionBuilder');
+        Files::removeDirectoryRecursively(self::getPackagesPath() . DIRECTORY_SEPARATOR . 'Neos.Splash.DistributionBuilder');
 
         // success
         $output->outputLine();
@@ -82,7 +84,6 @@ class CreateProjectScripts
         $output->outputLine('2. Migrate database "./flow doctrine:migrate"');
         $output->outputLine('3. Import site data "./flow site:import --package-key ' . $sitePackageKey . ' "');
         $output->outputLine('4. Start the Webserver "./flow server:run"');
-
     }
 
     /**
