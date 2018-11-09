@@ -1,5 +1,5 @@
 
-*ATTENTION this is totall WIP*
+*ATTENTION this is total WIP*
 
 ------------------------
 Neos Splash Distribution
