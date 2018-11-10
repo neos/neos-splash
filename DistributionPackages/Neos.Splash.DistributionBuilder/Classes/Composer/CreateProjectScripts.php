@@ -60,11 +60,11 @@ class CreateProjectScripts
         $sitePackageKey = null;
         switch ($type) {
             case 'create':
-                $sitePackageKey = self::askForPackageKey("Please define the namespace for your site-package:");
+                $sitePackageKey = $output->ask("Please specify the package-key for your site-package:");
                 self::createSitePackage($sitePackageConfiguration, $composer, $sitePackageKey);
                 break;
             case 'clone':
-                $sitePackageKey = self::askForPackageKey("Please define the namespace for your site-package:");
+                $sitePackageKey = $output->ask("Please specify the package-key for your site-package:");
                 self::cloneSitePackage($sitePackageConfiguration, $composer, $sitePackageKey);
                 break;
             case 'install':
@@ -90,27 +90,6 @@ class CreateProjectScripts
         $output->outputLine('3. Import site data "./flow site:import --package-key ' . $sitePackageKey . ' "');
         $output->outputLine('4. Start the Webserver "./flow server:run"');
     }
-
-    /**
-     * @param string $title
-     * @return string
-     */
-    protected static function askForPackageKey(string $title):string
-    {
-        $output = new ConsoleOutput();
-        $output->outputLine();
-        $output->outputLine($title);
-        $output->outputLine();
-
-        $vendorName = $output->ask("Vendor-name: ");
-        $projectName = $output->ask("Project-name: ");
-
-        $vendorName = trim($vendorName);
-        $projectName = trim($projectName);
-
-        return $vendorName . '.' . $projectName;
-    }
-
 
     /**
      * @param array $sitePackageConfiguration
