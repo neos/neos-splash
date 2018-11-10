@@ -13,6 +13,7 @@ use Neos\Utility\Files;
 use Neos\Utility\Arrays;
 
 use Neos\Splash\DistributionBuilder\Service\PackageService;
+use Neos\Splash\DistributionBuilder\Service\JsonFileService;
 use Neos\Splash\DistributionBuilder\Domain\ValueObjects\PackageRequirement;
 
 class CreateProjectScripts
@@ -76,7 +77,11 @@ class CreateProjectScripts
         // remove splash
         $output->outputLine();
         $output->outputLine('Remove the setup tool neos/splash-distributionbuilder');
-        shell_exec('composer remove neos/splash-distributionbuilder');
+        $composerConfiguration = JsonFileService::readFile(FLOW_PATH_ROOT . 'composer.json');
+        $composerConfiguration = Arrays::unsetValueByPath($composerConfiguration, ['requrie','neos/splash-distributionbuilder']);
+        $composerConfiguration = Arrays::unsetValueByPath($composerConfiguration, ['scripts','post-create-project-cmd']);
+        JsonFileService::writeFile(FLOW_PATH_ROOT . 'composer.json', $composerConfiguration);
+        shell_exec('composer update');
         Files::removeDirectoryRecursively(self::getPackagesPath() . DIRECTORY_SEPARATOR . 'Neos.Splash.DistributionBuilder');
 
         // success
