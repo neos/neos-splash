@@ -37,7 +37,12 @@ class CreateProjectScripts
         $output->outputLine('Please answer some questions for finishing the setup of your Neos-distribution.');
         $output->outputLine();
 
-        $configuration = Yaml::parseFile(__DIR__ . '/../../Resources/Private/SitePackageTemplates.yaml', true);
+        if ($configPath = getenv('SPLASH_CONFIGURATION')) {
+            $yaml = file_get_contents($configPath);
+            $configuration = Yaml::parse($yaml, true);
+        } else {
+            $configuration = Yaml::parseFile(__DIR__ . '/../../Configuration/Splash.yaml', true);
+        }
 
         $availableSitePackages = $configuration['sitePackages']['items'] ?? [];
         $defaultSitePackage = $configuration['sitePackages']['default'] ?? null;

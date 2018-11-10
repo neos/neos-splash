@@ -15,14 +15,12 @@ This package shall help you setting up your new Neos project.
 Configuration
 -------------
 
-The offered options are configured in the file DistributionPackages/Neos.Splash.DistributionBuilder/Resources/Private/SitePackageTemplates.yaml
-
-You can ovverride 
+The offered options are configured in the file DistributionPackages/Neos.Splash.DistributionBuilder/Configuration/Splash.yaml
 
 ```yaml
 
 #
-# the site packages that are offered during tge setup
+# the site packages that are offered during the setup process
 #
 sitePackages:
 
@@ -72,6 +70,13 @@ sitePackages:
         version: '^4.1'
 ```
 
+Custom configuration
+--------------------
+
+The environment variable `SPLASH_CONFIGURATION` can be used to pass a custom configuration file to the splash installer.
+
+Use a custom local file: `SPLASH_CONFIGURATION=~/mySplashConfiguration.yaml composer create-project neos-splash`  
+You can even use remote files: `SPLASH_CONFIGURATION=http://example.org composer create-project neos-splash`  
 
 Development
 -----------
