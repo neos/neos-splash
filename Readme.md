@@ -78,10 +78,12 @@ The environment variable `SPLASH_CONFIGURATION` can be used to pass a custom con
 Use a custom local file: `SPLASH_CONFIGURATION=~/mySplashConfiguration.yaml composer create-project neos-splash`  
 You can even use remote files: `SPLASH_CONFIGURATION=http://example.org composer create-project neos-splash`  
 
-Development
------------
+Development of Neos.Splash
+--------------------------
 
-During development you will have to add your local repository to the global composer configuration.
+If you want to help to improve splash you have to checkout the repository locally. 
+For testing of your modifications you have to add your local splash repository 
+to the global composer configuration.
 
 Add this to your global composer configuration config.json:
 
